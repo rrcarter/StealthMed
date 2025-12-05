@@ -7,7 +7,6 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime
 
-
 # -----------------------
 # Page config
 # -----------------------
@@ -218,7 +217,7 @@ base_cols = ["drug", "agegroup", "Prescriptions", "Publications"]
 show_cols = base_cols + [c for c in selected_optional if c in df.columns]  # ATC only if selected
 results_df = df[show_cols]
 
-st.dataframe(results_df, use_container_width=True, hide_index=True)
+st.dataframe(results_df, width='stretch', hide_index=True)
 
 # Download results CSV
 ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -275,7 +274,7 @@ if selected_drug:
             ade_df = ade_df.sort_values("prr", ascending=False, na_position="last")
         st.markdown(f"#### {subtitle}")
         ade_view = ade_df[cols_to_show]
-        st.dataframe(ade_view, use_container_width=True, hide_index=True)
+        st.dataframe(ade_view, width='stretch', hide_index=True)
 
         # Download ADE CSV
         ade_fname = f"rweeye_ade_{selected_drug.replace(' ', '_')}_{age_choice.replace(' ', '_')}_{ts}.csv"
