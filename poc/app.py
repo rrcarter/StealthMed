@@ -232,12 +232,11 @@ st.download_button(
 # -----------------------
 # ADE drill-down (dropdown selection) + CSV download
 # -----------------------
+st.markdown("---")
+st.markdown("### ADE metrics")
 visible_drugs = results_df["drug"].dropna().unique().tolist()
 pick = st.selectbox("Select a drug for ADE metrics", ["(None)"] + visible_drugs)
 selected_drug = None if pick == "(None)" else pick
-
-st.markdown("---")
-st.markdown("### ADE metrics")
 
 if selected_drug:
     # Try to find CUI for the selected drug from smr3 (any age row is fine)
