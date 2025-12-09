@@ -1,10 +1,10 @@
 # Table of Contents
 
-- [Prereqs]
-- [Access Tokens]
-- [Getting ready to develop locally]
-- [Contribution workflow]
-- [TLDR]
+- [Prereqs](#prerequisites)
+- [Access Tokens](#setup-your-personal-access-token-pat-for-github)
+- [Getting ready to develop locally](#setup-your-personal-access-token-pat-for-github)
+- [Contribution workflow](#contributing-to-stealthmed)
+- [TLDR](#tldr)
 
 # Prerequisites
 ### OS options
@@ -63,10 +63,9 @@ You have to use a Personal Access Token (PAT) instead of a password. If you skip
 	- git config --global user.name "Your Name"
 
 # Getting ready to develop Stealthmed locally
-## 1. Clone the repository if you haven't already
+## 1. Fork the repository into your Github if you haven't already
 - Tip: Look for the blue button that says Code <> for the URL
 - You only need to do this the first time :)
-- `git clone https://github.com/drrahurkar/StealthMed.git`
 ## 2. Make sure git is initialized in this folder 
 - You only need to do this the first time :)
 
@@ -100,13 +99,17 @@ git add _specificfilename.filetype_
 - git add _poc/app.py pyproject.toml uv.lock_
 git commit -m "What I did"
 - git commit -m "Made changes and stuff"
-git push origin your-feature-branch
-- git push origin 
+git remote set-url upstream https://YOURGITHUBNAME:YOURGITHUBTOKEN@github.com/YOURGITHUBNAME/StealthMed.git
+- This part is really finicky but its why you needed to fork the repo as a contributor
+git push upstream your-feature-branch
+- git push upstream _uvmigration_ 
 
-## Step 5. Log into Github.com to finish PR Request
+## Step 5. Log into Github.com to finish PR Request for approval
 You're not done after you push to Github, one more step with writing the Pull request 
-- Add "Fixes" to the title of the PR with the relevant issue number
-- It should be automatically linked to the issue
+- Add "Fixes" at the top of the description box (not the title) of the Pull Request
+- When you type "Fixes" you will see a drop-down menu with the issues numbered.  Select the relevant one.
+- Then it should be automatically linked to the issue
+- After submitting PR will be reviewed!
 
 # TLDR
 1. git pull origin main
@@ -114,5 +117,5 @@ You're not done after you push to Github, one more step with writing the Pull re
 3. `uv sync` → edit →  `uv run streamlit run app.py`
 4. `git add` _filename_.filetype
    `git commit -m "whatidid_keepitshort"`
-5. git push origin _descriptive name_
-6. GitHub Pull Request → "Fixes #X" 
+5. git push **upstream** _descriptive name_
+6. GitHub Pull Request → in the top of the description link the Issue with "Fixes #..."
