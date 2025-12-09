@@ -33,3 +33,4 @@ poc/prr3.csv
 
 # keep readme
 !README.md
+.venv/

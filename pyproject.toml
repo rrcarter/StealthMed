@@ -1,0 +1,9 @@
+[project]
+name = "stealthmed"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.3.3",
+    "pathlib>=1.0.1",
+    "streamlit>=1.52.0",
+]
