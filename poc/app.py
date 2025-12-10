@@ -287,6 +287,10 @@ if selected_drug:
                          width='stretch',
                          hide_index=True,
                          column_config={
+                             "pt": st.column_config.Column(
+                                 "pt",
+                                 help = "Reported ADE"
+                             ),
                              "ror": st.column_config.Column(
                                  "ror",
                                  help = "Reporting Odds Ratio"
