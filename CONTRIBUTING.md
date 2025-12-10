@@ -97,10 +97,13 @@ Before you stage your changes (Step 4) you must sync/update your Python packages
 ## Step 4. Upload to Github
 git add _specificfilename.filetype_
 - git add _poc/app.py pyproject.toml uv.lock_
+
 git commit -m "What I did"
 - git commit -m "Made changes and stuff"
+
 git remote set-url upstream https://YOURGITHUBNAME:YOURGITHUBTOKEN@github.com/YOURGITHUBNAME/StealthMed.git
 - This part is really finicky but its why you needed to fork the repo as a contributor
+
 git push upstream your-feature-branch
 - git push upstream _uvmigration_ 
 
