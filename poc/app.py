@@ -44,6 +44,7 @@ def render_header_logo(width_px: int = 340, top_pad_px: int = 6):
 """
     # Height can be a bit larger than the logo’s visual height to avoid accidental clipping.
     st.components.v1.html(html, height=width_px, scrolling=False)
+
 # -----------------------
 # Repo-relative paths (no absolute paths)
 # -----------------------
@@ -71,10 +72,11 @@ def resolve_any(paths: list[Path | None]) -> Path | None:
             return Path(p)
     return None
 
-
-
 # -----------------------
-# Data file targets (put these files in repo root or data/)
+# Data files
+# # """
+# TO DO: All datafiles will be moved
+# from root and organized into their own folder
 # -----------------------
 SMR_PATH = resolve_file("smr3.csv", "SMR3_CSV")
 PRR_PATH = resolve_file("prr3.csv", "PRR3_CSV")
@@ -139,14 +141,16 @@ if smr.empty or prr.empty:
 
 # -----------------------
 # Sidebar (filters)
+# TO DO: Reorder the ages
+# TO DO: Revise the navigation
 # -----------------------
 with st.sidebar:
     st.title("Filters")
 
-# Age radio — your smr3 has: 0-2, 3-10, 11-17, Total
+# Age categories: smr3 has: 0-2, 3-10, 11-17, Total
 age_order = ["0-2", "3-10", "11-17", "Total"]
 age_available = [a for a in age_order if a in smr["agegroup"].dropna().unique().tolist()] or age_order
-age_choice = st.sidebar.radio("Age category", age_available, index=min(len(age_available)-1, 3))
+age_choice = st.sidebar.radio("Age Categories", age_available, index=min(len(age_available)-1, 3))
 
 def opts(series: pd.Series):
     vals = [x for x in series.dropna().unique().tolist() if str(x).strip() != ""]
@@ -233,9 +237,11 @@ st.download_button(
 # ADE drill-down (dropdown selection) + CSV download
 # -----------------------
 st.markdown("---")
-st.markdown("### ADE metrics")
+st.markdown("### Adverse Drug Event (ADE) metrics")
+st.caption("Choose a drug from below for its ADE metrics")
+
 visible_drugs = results_df["drug"].dropna().unique().tolist()
-pick = st.selectbox("Select a drug for ADE metrics", ["(None)"] + visible_drugs)
+pick = st.selectbox("Druglist", ["(None)"] + visible_drugs)
 selected_drug = None if pick == "(None)" else pick
 
 if selected_drug:
@@ -273,22 +279,48 @@ if selected_drug:
             ade_df = ade_df.sort_values("prr", ascending=False, na_position="last")
         st.markdown(f"#### {subtitle}")
         ade_view = ade_df[cols_to_show]
-        st.dataframe(ade_view, width='stretch', hide_index=True)
 
-        # Download ADE CSV
-        ade_fname = f"rweeye_ade_{selected_drug.replace(' ', '_')}_{age_choice.replace(' ', '_')}_{ts}.csv"
-        st.download_button(
-            label="⬇️ Download ADE CSV",
-            data=ade_view.to_csv(index=False).encode("utf-8"),
-            file_name=ade_fname,
-            mime="text/csv",
-        )
-else:
-    st.caption("Pick a drug above to view ADE metrics (PRR / ROR / IC / EBGM).")
+    # ------------------------
+    # TOOLTIPS TO EACH ADE DATAVIEW COLUMN
+    # -------------------------
+        st.dataframe(ade_view,
+                         width='stretch',
+                         hide_index=True,
+                         column_config={
+                             "ror": st.column_config.Column(
+                                 "ror",
+                                 help = "Reporting Odds Ratio"
+                             ),
+                             "prr": st.column_config.Column(
+                                 "prr",
+                                 help = "Proportional Reporting Ratio"
+                             ),
+                             "ic": st.column_config.Column(
+                                 "ic",
+                                 help = "Information Component"
+                             ),
+                             "ebgm": st.column_config.Column(
+                                 "ebgmn",
+                                 help = "Empirical Bayesian Geometric Mean"
+                             )
+                         }
+                    )
+    #-----------------
+    # Download ADE CSV
+    #-----------------
+    ade_fname = f"rweeye_ade_{selected_drug.replace(' ', '_')}_{age_choice.replace(' ', '_')}_{ts}.csv"
+    st.download_button(
+        label="⬇️ Download ADE CSV",
+        data=ade_view.to_csv(index=False).encode("utf-8"),
+        file_name=ade_fname,
+        mime="text/csv",
+    )
 
 # -----------------------
 # Debug info
+# TO DO: This shows up when menu is none() and is no longer needed
 # -----------------------
+
 with st.expander("ⓘ Data info / Debug"):
     st.write(f"SMR3 path: {smr_src}")
     st.write(f"PRR3 path: {prr_src}")
