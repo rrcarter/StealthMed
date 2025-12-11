@@ -325,12 +325,12 @@ if selected_drug:
 
 # -----------------------
 # Debug info
-# TO DO: This shows up when menu is none() and is no longer needed
+# Hide this code from users
 # -----------------------
-
-with st.expander("ⓘ Data info / Debug"):
-    st.write(f"SMR3 path: {smr_src}")
-    st.write(f"PRR3 path: {prr_src}")
-    st.write("SMR rows (after is_first==1):", len(smr))
-    st.write("PRR rows:", len(prr))
-    st.write("Filtered rows:", len(df))
+if False:
+    with st.expander("ⓘ Data info / Debug"):
+        st.write(f"SMR3 path: {smr_src}")
+        st.write(f"PRR3 path: {prr_src}")
+        st.write("SMR rows (after is_first==1):", len(smr))
+        st.write("PRR rows:", len(prr))
+        st.write("Filtered rows:", len(df))
