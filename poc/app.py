@@ -146,9 +146,10 @@ with st.sidebar:
     st.title("Filters")
 
 # Age categories in smr3: Total, 0-2, 3-10, 11-17
+# Sets "Total" as first in age_order and age_available
 age_order = ["Total", "0-2", "3-10", "11-17"]
 age_available = [a for a in age_order if a in smr["agegroup"].dropna().unique().tolist()] or age_order
-age_choice = st.sidebar.radio("Age Categories", age_available, index=min(len(age_available)-1, 3))
+age_choice = st.sidebar.radio("Age Categories", age_available, index=0)
 
 # Sorting
 sort_metric = st.sidebar.radio("Sort by", ["Prescriptions", "Publications"], index=0)
