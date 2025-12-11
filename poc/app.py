@@ -140,17 +140,19 @@ if smr.empty or prr.empty:
 
 
 # -----------------------
-# Sidebar (filters)
-# TO DO: Reorder the ages
-# TO DO: Revise the navigation
+# Sidebar Navigation (filters)
 # -----------------------
 with st.sidebar:
     st.title("Filters")
 
-# Age categories: smr3 has: 0-2, 3-10, 11-17, Total
-age_order = ["0-2", "3-10", "11-17", "Total"]
+# Age categories in smr3: Total, 0-2, 3-10, 11-17
+age_order = ["Total", "0-2", "3-10", "11-17"]
 age_available = [a for a in age_order if a in smr["agegroup"].dropna().unique().tolist()] or age_order
 age_choice = st.sidebar.radio("Age Categories", age_available, index=min(len(age_available)-1, 3))
+
+# Sorting
+sort_metric = st.sidebar.radio("Sort by", ["Prescriptions", "Publications"], index=0)
+sort_desc = st.sidebar.checkbox("Sort descending", value=True)
 
 def opts(series: pd.Series):
     vals = [x for x in series.dropna().unique().tolist() if str(x).strip() != ""]
@@ -169,17 +171,18 @@ smr_l3 = smr_l2 if l3_choice == "All" else smr_l2[smr_l2["l3"] == l3_choice]
 l4_choice = st.sidebar.selectbox("Chemical subgroup (ATC L4)", opts(smr_l3["l4"]) if "l4" in smr_l3.columns else ["All"])
 smr_filtered = smr_l3 if l4_choice == "All" else smr_l3[smr_l3["l4"] == l4_choice]
 
+# Use smr_filtered to populate search picks
 # Drug search (autocomplete)
+with st.sidebar:
+    st.markdown("## Filter by drug name")
 drug_options = sorted(smr_filtered["drug"].dropna().unique().tolist())
-search_pick = st.sidebar.multiselect("Search drug", options=drug_options)
+search_pick = st.sidebar.multiselect("Select drug", options=drug_options)
 
+with st.sidebar:
+    st.markdown("## Add ATCs to<br>results table", unsafe_allow_html=True)
 # Optional ATC display columns (your “Only show ATC rows if selected”)
 optional_atc_cols = [c for c in ["l1", "l2", "l3", "l4"] if c in smr_filtered.columns]
-selected_optional = st.sidebar.multiselect("Add ATC columns", options=optional_atc_cols)
-
-# Sorting
-sort_metric = st.sidebar.radio("Sort by", ["Prescriptions", "Publications"], index=0)
-sort_desc = st.sidebar.checkbox("Sort descending", value=True)
+selected_optional = st.sidebar.multiselect("Select ATCs", options=optional_atc_cols)
 
 # -----------------------
 # Apply filters
